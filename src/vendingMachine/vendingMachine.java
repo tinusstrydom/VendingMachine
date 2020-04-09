@@ -1,13 +1,11 @@
 package vendingMachine;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
@@ -15,8 +13,15 @@ import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JOptionPane;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import vendingMachine.Admin;
 
-public class vendingMachine extends JFrame {
+
+public class VendingMachine extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField usernameTF;
@@ -27,7 +32,7 @@ public class vendingMachine extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vendingMachine frame = new vendingMachine();
+					VendingMachine frame = new VendingMachine();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +42,7 @@ public class vendingMachine extends JFrame {
 	}
 
 	//Constructor Method
-	public vendingMachine() {
+	public VendingMachine() {
 		initUI();
 	}
 	//Create applications layout in initUI
@@ -52,7 +57,7 @@ public class vendingMachine extends JFrame {
 		JPanel adminpanel = new JPanel();
 		adminpanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Admin", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		adminpanel.setFont(new Font("Segoe UI Semibold", Font.BOLD, 11));
-		adminpanel.setBounds(143, 267, 320, 138);
+		adminpanel.setBounds(154, 312, 320, 138);
 		contentPane.add(adminpanel);
 		adminpanel.setLayout(null);
 		
@@ -75,22 +80,51 @@ public class vendingMachine extends JFrame {
 		adminpanel.add(usernameTF);
 		usernameTF.setColumns(10);
 		
-		JButton login = new JButton("Login");
-		login.setBackground(new Color(38, 84, 124));
-		login.setBorderPainted(false);
-		login.setBounds(89, 90, 89, 23);
-		adminpanel.add(login);
+		JButton loginbtn = new JButton("Login");
+		loginbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String username = usernameTF.getText();
+				String password = passwordTF.getText();
+				
+				if(username.contains("Tinus") && password.contains("one")) {
+					usernameTF.setText(null);
+					passwordTF.setText(null);
+					Admin admin = new Admin();
+					admin.setVisible(true);
+					dispose();
+				}else {
+					JOptionPane.showMessageDialog(null, "Invalid login details", "Login Error",JOptionPane.ERROR_MESSAGE);
+					usernameTF.setText(null);
+					passwordTF.setText(null);
+				}
+			}
+		});
+		loginbtn.setBackground(new Color(38, 84, 124));
+		loginbtn.setBorderPainted(false);
+		loginbtn.setBounds(89, 90, 89, 23);
+		adminpanel.add(loginbtn);
 		
-		JButton reset = new JButton("Reset");
-		reset.setBackground(new Color(38, 84, 124));
-		reset.setBorderPainted(false);
-		reset.setBounds(221, 23, 89, 23);
-		adminpanel.add(reset);
+		JButton resetbtn = new JButton("Reset");
+		resetbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				usernameTF.setText(null);
+				passwordTF.setText(null);
+			}
+		});
+		resetbtn.setBackground(new Color(38, 84, 124));
+		resetbtn.setBorderPainted(false);
+		resetbtn.setBounds(221, 23, 89, 23);
+		adminpanel.add(resetbtn);
 		
-		JButton exit = new JButton("Exit");
-		exit.setBackground(new Color(38, 84, 124));
-		exit.setBorderPainted(false);
-		exit.setBounds(221, 58, 89, 23);
-		adminpanel.add(exit);
+		JButton exitbtn = new JButton("Exit");
+		exitbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		exitbtn.setBackground(new Color(38, 84, 124));
+		exitbtn.setBorderPainted(false);
+		exitbtn.setBounds(221, 58, 89, 23);
+		adminpanel.add(exitbtn);
 	}
 }
