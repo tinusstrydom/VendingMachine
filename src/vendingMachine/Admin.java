@@ -14,22 +14,153 @@ import vendingMachine.VendingMachine;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import java.util.*;
+import java.sql.*;
+import java.awt.Insets;
 
 public class Admin extends JFrame {
 	
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
-	private JTextField textField_9;
-	private JTextField textField_10;
-	private JTextField textField_11;
+	public String dbUrl = "jdbc:mysql://localhost:3306/vmachine";
+	public String dbUser = "myuser";
+	public String dbPass = "myuser08";
+	
+	String name;
+	int x = 10;
+	int y = 40;
+	int addX = 176;
+	int addY = 37;
+	int removeX = 272;
+	int removeY = 37;
+	int qtyX = 368;
+	int qtyY = 37;
+	
+	int id, qty;
+	private JTextField addTF;
+	private JTextField removeTF;
+	private JTextField qtyTF;
+	private JLabel lname;
+	
+	/**
+	 * Create the frame.
+	 */
+	public Admin() {
+		// Try/catch statement 
+		try{
+			// Allocate database connection object
+			Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+			// Allocate statement object in connection
+			Statement stmt = conn.createStatement();
+			// Execute SQL select query
+			// Query result is returned in the ResultSet object 
+			String sqlSelect = "select * from stock";
+			ResultSet rset = stmt.executeQuery(sqlSelect);
+					
+			//Admin Layout
+			//Set Jframe
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setBounds(100, 100, 500, 500);
+			contentPane = new JPanel();
+			contentPane.setBackground(new Color(255, 0, 51));
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			setContentPane(contentPane);
+			contentPane.setLayout(null);
+			
+			//JPANEL
+			JPanel panel = new JPanel();
+			panel.setBounds(10, 11, 464, 399);
+			contentPane.add(panel);
+			panel.setLayout(null);
+			
+			//Headings
+			JLabel add = new JLabel("Add");
+			add.setBounds(176, 11, 46, 14);
+			panel.add(add);
+			
+			JLabel remove = new JLabel("Remove");
+			remove.setBounds(272, 11, 46, 14);
+			panel.add(remove);
+			
+			JLabel qty1 = new JLabel("Quantity");
+			qty1.setBounds(368, 11, 46, 14);
+			panel.add(qty1);
+			
+			//While loop to get each column from resultset
+			while(rset.next()) {
+				name = rset.getString("name");
+				qty = rset.getInt("qty");
+				
+				lname = new JLabel(name);
+				lname.setBounds(x, y, 75, 20);
+				panel.add(lname);
+				
+				addTF = new JTextField();
+				addTF.setBounds(addX, addY, 75, 20);
+				panel.add(addTF);
+				addTF.setColumns(10);
+				
+				removeTF = new JTextField();
+				removeTF.setBounds(removeX, removeY, 75, 20);
+				panel.add(removeTF);
+				removeTF.setColumns(10);
+				
+				qtyTF = new JTextField();
+				qtyTF.setEditable(false);
+				qtyTF.setBounds(qtyX, qtyY, 75, 20);
+				qtyTF.setText(Integer.toString(qty));
+				panel.add(qtyTF);
+				qtyTF.setColumns(10);
+				
+				y+= 30;
+				addY += 30;
+				removeY += 30;
+				qtyY += 30;
+				
+			}
+			JButton addbtn = new JButton("Add");
+			addbtn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println(addTF);
+				}
+			});
+			addbtn.setMargin(new Insets(2, 7, 2, 7));
+			addbtn.setBorderPainted(false);
+			addbtn.setBounds(176, addY, 75, 23);
+			panel.add(addbtn);
+			
+			JButton removebtn = new JButton("Remove");
+			removebtn.setMargin(new Insets(2, 7, 2, 7));
+			removebtn.setBorderPainted(false);
+			removebtn.setBounds(272, removeY, 75, 23);
+			panel.add(removebtn);
+			
+			JButton adminExit = new JButton("Exit");
+			adminExit.setBackground(new Color(0, 204, 255));
+			adminExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					VendingMachine vMachine = new VendingMachine();
+					vMachine.setVisible(true);
+					dispose();
+				}
+			});
+			adminExit.setBounds(303, 427, 158, 23);
+			contentPane.add(adminExit);
+			
+			
+			
+			
+			
+			
+			
+		//Catch exception
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		
+		
+		
+	}
 
 	/**
 	 * Launch the application.
@@ -45,156 +176,5 @@ public class Admin extends JFrame {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Admin() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 500);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(255, 0, 51));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JButton adminExit = new JButton("Exit");
-		adminExit.setBackground(new Color(0, 204, 255));
-		adminExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				VendingMachine vMachine = new VendingMachine();
-				vMachine.setVisible(true);
-				dispose();
-			}
-		});
-		adminExit.setBounds(303, 427, 158, 23);
-		contentPane.add(adminExit);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(11, 3, 462, 355);
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		JLabel coke = new JLabel("Coke");
-		coke.setHorizontalAlignment(SwingConstants.LEFT);
-		coke.setBounds(10, 37, 46, 14);
-		panel.add(coke);
-		
-		JLabel creamsoda = new JLabel("Cream Soda");
-		creamsoda.setHorizontalAlignment(SwingConstants.LEFT);
-		creamsoda.setBounds(10, 62, 75, 14);
-		panel.add(creamsoda);
-		
-		JLabel fanta = new JLabel("Fanta");
-		fanta.setHorizontalAlignment(SwingConstants.LEFT);
-		fanta.setBounds(10, 87, 46, 14);
-		panel.add(fanta);
-		
-		JLabel gtwist = new JLabel("Granadilla Twist");
-		gtwist.setHorizontalAlignment(SwingConstants.LEFT);
-		gtwist.setBounds(10, 112, 75, 14);
-		panel.add(gtwist);
-		
-		JLabel ironbrew = new JLabel("Ironbrew");
-		ironbrew.setHorizontalAlignment(SwingConstants.LEFT);
-		ironbrew.setBounds(10, 136, 46, 14);
-		panel.add(ironbrew);
-		
-		JLabel ltwist = new JLabel("Lemon Twist");
-		ltwist.setHorizontalAlignment(SwingConstants.LEFT);
-		ltwist.setBounds(10, 161, 75, 14);
-		panel.add(ltwist);
-		
-		JLabel nwater = new JLabel("Natural Water");
-		nwater.setHorizontalAlignment(SwingConstants.LEFT);
-		nwater.setBounds(10, 186, 75, 14);
-		panel.add(nwater);
-		
-		JLabel swater = new JLabel("Sparkling Water");
-		swater.setHorizontalAlignment(SwingConstants.LEFT);
-		swater.setBounds(10, 211, 85, 14);
-		panel.add(swater);
-		
-		JLabel stoney = new JLabel("Stoney");
-		stoney.setHorizontalAlignment(SwingConstants.LEFT);
-		stoney.setBounds(10, 238, 46, 14);
-		panel.add(stoney);
-		
-		textField = new JTextField();
-		textField.setBounds(90, 34, 86, 20);
-		panel.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(269, 34, 86, 20);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(176, 34, 86, 20);
-		panel.add(textField_2);
-		textField_2.setColumns(10);
-		
-		textField_3 = new JTextField();
-		textField_3.setBounds(373, 34, 86, 20);
-		panel.add(textField_3);
-		textField_3.setColumns(10);
-		
-		JLabel add = new JLabel("Add qty");
-		add.setBounds(87, 11, 46, 14);
-		panel.add(add);
-		
-		JLabel remove = new JLabel("Remove qty");
-		remove.setBounds(175, 11, 46, 14);
-		panel.add(remove);
-		
-		JLabel qty = new JLabel("Quantity");
-		qty.setBounds(270, 9, 46, 14);
-		panel.add(qty);
-		
-		JLabel stock = new JLabel("Stock value");
-		stock.setBounds(363, 9, 46, 14);
-		panel.add(stock);
-		
-		textField_4 = new JTextField();
-		textField_4.setBounds(90, 60, 86, 20);
-		panel.add(textField_4);
-		textField_4.setColumns(10);
-		
-		textField_5 = new JTextField();
-		textField_5.setBounds(90, 86, 86, 20);
-		panel.add(textField_5);
-		textField_5.setColumns(10);
-		
-		textField_6 = new JTextField();
-		textField_6.setBounds(90, 109, 86, 20);
-		panel.add(textField_6);
-		textField_6.setColumns(10);
-		
-		textField_7 = new JTextField();
-		textField_7.setBounds(90, 133, 86, 20);
-		panel.add(textField_7);
-		textField_7.setColumns(10);
-		
-		textField_8 = new JTextField();
-		textField_8.setBounds(90, 158, 86, 20);
-		panel.add(textField_8);
-		textField_8.setColumns(10);
-		
-		textField_9 = new JTextField();
-		textField_9.setBounds(90, 183, 86, 20);
-		panel.add(textField_9);
-		textField_9.setColumns(10);
-		
-		textField_10 = new JTextField();
-		textField_10.setBounds(90, 208, 86, 20);
-		panel.add(textField_10);
-		textField_10.setColumns(10);
-		
-		textField_11 = new JTextField();
-		textField_11.setBounds(90, 235, 86, 20);
-		panel.add(textField_11);
-		textField_11.setColumns(10);
 	}
 }
