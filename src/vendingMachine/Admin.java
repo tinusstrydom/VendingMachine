@@ -138,11 +138,12 @@ public class Admin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				for(int i = 0; i < ladd.size(); i++) {
 					try {
+						//added one to i ,(sql id starts at 1 up to 9)
+						int ii = i+1;
 						// Allocate database connection object
 						Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 						// Allocate statement object in connection
 						Statement stmt = conn.createStatement();	
-						int ii = i+1;
 						// Execute SQL update query
 						String sqlSelect = "update stock set qty=qty+'"+ladd.get(i).getText() +"' where id="+ii;
 						stmt.executeUpdate(sqlSelect);	

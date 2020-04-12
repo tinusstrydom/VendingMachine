@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
+
 import vendingMachine.Admin;
 
 
@@ -84,9 +86,10 @@ public class VendingMachine extends JFrame {
 		loginbtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String username = usernameTF.getText();
-				String password = passwordTF.getText();
+				char[] password = passwordTF.getPassword();
+				char[] correctPass = {'o','n','e'};
 				
-				if(username.contains("Tinus") && password.contains("one")) {
+				if(username.contains("Tinus") && Arrays.equals(password, correctPass)) {
 					usernameTF.setText(null);
 					passwordTF.setText(null);
 					Admin admin = new Admin();
