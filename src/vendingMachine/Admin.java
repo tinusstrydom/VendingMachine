@@ -145,8 +145,8 @@ public class Admin extends JFrame {
 						// Allocate statement object in connection
 						Statement stmt = conn.createStatement();	
 						// Execute SQL update query
-						String sqlSelect = "update stock set qty=qty+'"+ladd.get(i).getText() +"' where id="+ii;
-						stmt.executeUpdate(sqlSelect);	
+						String sqlUpdate = "update stock set qty=qty+'"+ladd.get(i).getText() +"' where id="+ii;
+						stmt.executeUpdate(sqlUpdate);	
 					}catch(SQLException ex) {
 						ex.printStackTrace();
 					}
