@@ -260,7 +260,7 @@ public class Admin extends JFrame {
 						// Query result is returned in the ResultSet object 
 						String sqlSelect = "select * from stock";
 						ResultSet rset = stmt.executeQuery(sqlSelect);	
-						//While loop to get each column from resultset
+						
 						for(int j = 0; rset.next(); j++) {
 							qty = rset.getInt("qty");
 							lqty.get(j).setText(Integer.toString(qty));

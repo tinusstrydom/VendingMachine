@@ -62,8 +62,6 @@ public class VendingMachine extends JFrame {
 	String sqlSelect, selected, name;
 	int qty;
 	
-	
-	
 	//Constructor Method
 	public VendingMachine() {
 		initUI();
@@ -185,6 +183,8 @@ public class VendingMachine extends JFrame {
 		itemPanel.setBackground(new Color(32, 32, 32));
 		itemPanel.setBounds(8, 43, 584, 200);
 		contentPane.add(itemPanel);
+		
+		
 		
 		coke = new JButton("Coke");
 		coke.setFocusable(false);
@@ -593,6 +593,53 @@ public class VendingMachine extends JFrame {
 		swater.setBounds(391, 138, 185, 50);
 		itemPanel.add(swater);
 		
+		try {
+			// Allocate database connection object
+			Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+			// Allocate statement object in connection
+			Statement stmt = conn.createStatement();	
+			String sqlSelect = "select * from stock";
+			ResultSet rset = stmt.executeQuery(sqlSelect);
+			
+			while(rset.next()) {
+				name = rset.getString("name");
+				qty = rset.getInt("qty");
+				
+				if(name.equals("Coke") && qty == 0) {
+					coke.setEnabled(false);
+					coke.setText("Sold out!");
+				}else if(name.equals("Creamsoda") && qty == 0) {
+					creamsoda.setEnabled(false);
+					creamsoda.setText("Sold out!");
+				}else if(name.equals("Fanta") && qty == 0) {
+					fanta.setEnabled(false);
+					fanta.setText("Sold out!");
+				}else if(name.equals("Gtwist") && qty == 0) {
+					gtwist.setEnabled(false);
+					gtwist.setText("Sold out!");
+				}else if(name.equals("Ironbrew") && qty == 0) {
+					ironbrew.setEnabled(false);
+					ironbrew.setText("Sold out!");
+				}else if(name.equals("Ltwist") && qty == 0) {
+					ltwist.setEnabled(false);
+					ltwist.setText("Sold out!");
+				}else if(name.equals("Nwater") && qty == 0) {
+					nwater.setEnabled(false);
+					nwater.setText("Sold out!");
+				}else if(name.equals("Stoney") && qty == 0) {
+					stoney.setEnabled(false);
+					stoney.setText("Sold out!");
+				}else if(name.equals("Swater") && qty == 0) {
+					swater.setEnabled(false);
+					swater.setText("Sold out!");
+				}
+			}
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		
+		
 		JPanel purchasePanel = new JPanel();
 		purchasePanel.setFont(new Font("Segoe UI Semibold", Font.BOLD, 11));
 		purchasePanel.setForeground(Color.WHITE);
@@ -687,7 +734,6 @@ public class VendingMachine extends JFrame {
 							Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
 							// Allocate statement object in connection
 							Statement stmt = conn.createStatement();	
-							// Execute SQL update query
 							
 							if(coke.isSelected()) {
 								selected = "Coke";
